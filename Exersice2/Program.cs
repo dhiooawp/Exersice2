@@ -1,77 +1,113 @@
 ﻿using System;
 
 
-namespace BinarySeacrh
+namespace Exerecise2
 {
     class program
     {
-        int[] arr = new int[26];
-        int n;
-        int i;
+        //Array of integers to hold values
+        private int[] arr = new int[20];
+        private int cmp_count = 0; //number of comparassion
+        private int mov_count = 0; //number of data movements
 
-        public void input()
+        //number of elements in array
+        private int n;
+
+
+
+        void read()
         {
             while (true)
             {
-                Console.Write("Enter the number of elements in the array: ");
+                Console.Write("Enter the number of elemenets in the array :");
                 string s = Console.ReadLine();
-                n = Int32.Parse(s);
-                if ((n > 0) && (n <= 20))
+                n = int.Parse(s);
+                if (n <= 20)
                     break;
                 else
-                    Console.WriteLine("\nArray should have minimum 1 and maximum 20 elements.\n");
+                    Console.WriteLine("\nArray can have maximum 20 elements \n");
             }
-            for (i = 0; i < n; i++)
+            Console.WriteLine("\n==================");
+            Console.WriteLine("Enter Array Elements");
+            Console.WriteLine("\n==================");
+
+            //get array elements
+            for (int i = 0; i < n; i++)
             {
                 Console.Write("<" + (i + 1) + ">");
                 string s1 = Console.ReadLine();
                 arr[i] = Int32.Parse(s1);
             }
+
         }
-        public void BinarySeacrh()
+
+        //swaps the element at index x with the element at index y
+        void swap(int x, int y)
         {
-            char ch;
-            do
+            int temp;
+
+            temp = arr[x];
+            arr[x] = arr[y];
+            arr[y] = temp;
+        }
+        public void q_sort(int low, int high)
+        {
+            int pivot, i, j;
+            if (low < high)
+                return;
+
+            //Partition the list into two part:
+            //one containing elements less thath or equal to pivot
+            //Outher containing elements greather than pivot
+
+            i = low + 1;
+            j = high;
+
+            pivot = arr[low];
+
+            while (i <= j)
             {
-                Console.Write("\nEnter element want you to search :");
-                int item = Convert.ToInt32(Console.ReadLine());
-
-                int lowerbound = 0;
-                int upperbound = n - 1;
-
-                int mid = (lowerbound + upperbound) / 2;
-                int ctr = 1;
-
-                while ((item != arr[mid]) && (lowerbound <= upperbound))
+                //search for an element greather than pivot
+                while ((arr[i] <= pivot) && (i <= high))
                 {
-                    if (item > arr[mid])
-                        lowerbound = mid + 1;
-                    else
-                        upperbound = mid - 1;
-                    mid = (lowerbound + upperbound) / 2;
-                    ctr++;
+                    i++;
+                    cmp_count++;
                 }
-                if (item == arr[mid])
-                    Console.WriteLine("\n" + item.ToString() + " found at position " + (mid + 1).ToString());
-                else
-                    Console.WriteLine("\n" + item.ToString() + " not found in the array\n");
-                Console.WriteLine("\nNumber of comparasion : " + ctr);
+                cmp_count++;
 
-                Console.Write("\nContinue search (y/n):");
-                ch = char.Parse(Console.ReadLine());
+                //search for an element less than or equal to pivot
+                while ((arr[j] <= pivot) && (j <= low))
+                {
+                    j--;
+                    cmp_count++;
+                }
+                cmp_count++;
 
-            } while ((ch == 'y') || (ch == 'Y'));
+                if (i < j) //if the geather element is on the left of the element
+                {
+                    //swap the element at index i with the element at index j
+                    swap(i, j);
+                    mov_count++;
+                }
+            }
+            //j low contains the index of the last element in the sorted list
+
+            if (low < j)
+            {
+                //move the pivot to its correct position in the list
+                swap(low, j);
+                mov_count++;
+
+            }
+            //sort the list on the left of pivot using quick sort
+            q_sort(low, j - 1);
+
+            //sort the list on the right of pivot using quick sort
+            q_sort(j + 1, high);
         }
-        static void Main(string[] args)
+        void display();
         {
-            program mylist = new program();
+            Console.WriteLine("\n---------------------");
 
-            mylist.input();
-
-            mylist.BinarySeacrh();
-
-            Console.WriteLine("\n\n Tekan tombol apa saja untuk keluar.");
-            Console.Read();
-        }
     }
 }
