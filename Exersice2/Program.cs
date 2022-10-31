@@ -2,7 +2,9 @@
 {
     class program
     {
-        int[] arr = new int[];
+        int[] arr = new int[26];
+        int n;
+        int i;
 
     }
 }
